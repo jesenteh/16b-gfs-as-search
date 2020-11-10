@@ -208,7 +208,7 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 		//!!Modify below to specify the search space. Remember to modify the second if statement below this one as well.
 
         //Uncomment below to search all possible truncated differences
-        for(unsigned int diff = MIN_DIFF; diff < MAX_DIFF; diff++){
+        for(unsigned int diff = MIN_DIFF; diff < MAX_DIFF; diff+=INCREMENT){
         //1 = 0000000000000001 16 = 0000000000001000 65536 = 1111111111111111
 
         //Uncomment below to limit the search space to hamming weight of 1 on even positions only
@@ -228,7 +228,7 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 		//!!Modify below to specify the search space (along with the one above)
 
         //Uncomment below to search all possible truncated differences
-        for(unsigned int diff = MIN_DIFF; diff < MAX_DIFF; diff++){
+        for(unsigned int diff = MIN_DIFF; diff < MAX_DIFF; diff+=INCREMENT){
 
         //Uncomment below to limit the search space to hamming weight of 1 on even positions only
 //		for(unsigned int diff = 1; diff < 65536; diff<<=1){
