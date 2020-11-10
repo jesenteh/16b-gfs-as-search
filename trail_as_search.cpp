@@ -15,8 +15,8 @@ std::map<string, int> truncSet;
 
 long globalCount = 0;
 
-//Permutation is 16! if exhaustive, 16! is a large number..
-int perm[16] ={5,0,1,4,7,12,3,8,13,6,9,2,15,10,11,14}; //TWINE permutation
+
+
 std::string perm_str = "";
 std::string file_name = "training-data-";
 
@@ -117,6 +117,18 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 			//------------ update Bn value!!------------
 			*Bn = tmp_as;
 			B[n] = tmp_as;
+
+			int AS = 0;
+            for (int i = 0; i < nrounds; i++)
+            {
+                AS = AS + internalTruncState[i][0];
+            }
+
+            AS = AS + internalTruncState[NROUNDS][0];
+			ofstream file;
+            file.open(file_name, ios::in | ios::app);
+            cout << "Number of samples: " << ++globalCount << endl;
+            file << std::bitset<16>(internalTruncState[0][1]) << ", " << std::bitset<16>(internalTruncState[NROUNDS][1]) << ", " << AS << ", " << NROUNDS <<  ", " << perm_str << endl;
 		}
 
 		// Round-0 and not last round
@@ -161,7 +173,7 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 
                     ofstream file;
                     file.open(file_name, ios::in | ios::app);
-					cout << "Number of samples: " << globalCount++ << endl;
+					cout << "Number of samples: " << ++globalCount << endl;
 					file << std::bitset<16>(internalTruncState[0][1]) << ", " << std::bitset<16>(internalTruncState[NROUNDS][1]) << ", " << AS << ", " << NROUNDS <<  ", " << perm_str << endl;
 				}
 			//}
@@ -196,7 +208,8 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 		//!!Modify below to specify the search space. Remember to modify the second if statement below this one as well.
 
         //Uncomment below to search all possible truncated differences
-        for(unsigned int diff = 1; diff < 16; diff++){
+        for(unsigned int diff = MIN_DIFF; diff < MAX_DIFF; diff++){
+        //1 = 0000000000000001 16 = 0000000000001000 65536 = 1111111111111111
 
         //Uncomment below to limit the search space to hamming weight of 1 on even positions only
 //		for(unsigned int diff = 1; diff < 65536; diff<<=1){
@@ -215,7 +228,7 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 		//!!Modify below to specify the search space (along with the one above)
 
         //Uncomment below to search all possible truncated differences
-        for(unsigned int diff = 1; diff < 16; diff++){
+        for(unsigned int diff = MIN_DIFF; diff < MAX_DIFF; diff++){
 
         //Uncomment below to limit the search space to hamming weight of 1 on even positions only
 //		for(unsigned int diff = 1; diff < 65536; diff<<=1){
@@ -252,15 +265,16 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 
 uint32_t cp_AS_search(int B[])
 {
-    for (int i=0;i<15;i++){
+    for (int i=15;i>0;i--){
         perm_str += ( std::to_string(perm[i]) + ", ");
     }
-    perm_str+= std::to_string(perm[15]);
+    perm_str+= std::to_string(perm[0]);
 
     file_name+= (std::to_string(NROUNDS) + "-");
-    for (int i=0;i<15;i++){
+    for (int i=15;i>0;i--){
         file_name += (std::to_string(perm[i]));
     }
+    file_name+= std::to_string(perm[0]);
     file_name+=".csv";
 
 	// uint32_t num_rounds = NROUNDS; //UNUSED
