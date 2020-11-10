@@ -70,10 +70,6 @@ using namespace std;
 #define SAMPLE_INTERVAL MAX_DIFF //Number of samples taken between MIN_DIFF and MAX_DIFF
 #endif
 
-#ifndef INCREMENT
-#define INCREMENT MAX_DIFF/INCREMENT //Number of samples taken between MIN_DIFF and MAX_DIFF
-#endif
-
 //Permutation is 16! if exhaustive, 16! is a large number..
 const int perm[16] ={1,4,5,0,13,6,9,2,7,12,3,8,11,14,15,10}; //TWINE permutation (note that bit 0 is right-most)
 //const int perm[16] ={1,2,15,8,5,14,3,12,7,0,9,4,11,6,13,10}; //No. 5 permutation (note that bit 0 is right-most)
@@ -83,6 +79,10 @@ const int perm[16] ={1,4,5,0,13,6,9,2,7,12,3,8,11,14,15,10}; //TWINE permutation
 //const int perm[16] ={5,2,1,10,3,6,15,8,9,12,7,0,11,4,13,14}; //No. 12 permutation (note that bit 0 is right-most)
 
 //End Control Panel*****************************************************************************************************
+
+#ifndef INCREMENT
+#define INCREMENT MAX_DIFF/SAMPLE_INTERVAL //Number of samples taken between MIN_DIFF and MAX_DIFF
+#endif
 
 //diff Table
 extern vector <vector <pair <unsigned int, unsigned int> > > diffTable;
