@@ -55,7 +55,7 @@ using namespace std;
 //Control Panel*****************************************************************************************************
 //NOTE: Adjust this for different number of round
 #ifndef NROUNDS
-#define NROUNDS 1 //Number of rounds being tested
+#define NROUNDS 8 //Number of rounds being tested
 #endif
 
 #ifndef MIN_DIFF
@@ -63,7 +63,7 @@ using namespace std;
 #endif
 
 #ifndef MAX_DIFF
-#define MAX_DIFF 128 //Maximum value of input difference
+#define MAX_DIFF 65536 //Maximum value of input difference
 #endif
 
 #ifndef SAMPLE_INTERVAL
@@ -72,7 +72,7 @@ using namespace std;
 
 //Permutation is 16! if exhaustive, 16! is a large number..
 const int perm[16] ={1,4,5,0,13,6,9,2,7,12,3,8,11,14,15,10}; //TWINE permutation (note that bit 0 is right-most)
-//const int perm[16] ={1,2,15,8,5,14,3,12,7,0,9,4,11,6,13,10}; //No. 5 permutation (note that bit 0 is right-most)
+//const int perm[16] ={1,2,15,8,5,14,3,12,7,0,9,4,11,6,13,the n10}; //No. 5 permutation (note that bit 0 is right-most)
 //const int perm[16] ={5,2,15,6,1,10,3,0,7,8,9,12,11,4,13,14}; //No. 7 permutation (note that bit 0 is right-most)
 //const int perm[16] ={5,2,15,12,1,8,3,10,7,0,9,6,11,4,13,14}; //No. 9 permutation (note that bit 0 is right-most)
 //const int perm[16] ={3,10,1,14,5,6,15,0,9,12,7,4,11,2,13,8}; //No. 10 permutation (note that bit 0 is right-most)
