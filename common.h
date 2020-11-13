@@ -62,6 +62,10 @@ using namespace std;
 #define HW_LIMIT 8 //Maximum HW of random samples to test
 #endif
 
+#ifndef MAX_SAMPLES
+#define MAX_SAMPLES 12500 //Samples to generate
+#endif
+
 //Permutation is 16! if exhaustive, 16! is a large number..
 const int perm[16] ={5,0,1,4,7,12,3,8,13,6,9,2,15,10,11,14}; //TWINE permutation
 //const int perm[16] ={5,2,9,4,11,6,15,8,3,12,1,10,7,0,13,14}; //No. 5 permutation
