@@ -59,11 +59,15 @@ using namespace std;
 #endif
 
 #ifndef HW_LIMIT
-#define HW_LIMIT 8 //Maximum HW of random samples to test
+#define HW_LIMIT 16 //Maximum HW of random samples to test
 #endif
 
 #ifndef MAX_SAMPLES
 #define MAX_SAMPLES 12500 //Samples to generate
+#endif
+
+#ifndef SAMPLE_LIMIT
+#define SAMPLE_LIMIT 4 //Limit number of samples per difference
 #endif
 
 //Permutation is 16! if exhaustive, 16! is a large number..
