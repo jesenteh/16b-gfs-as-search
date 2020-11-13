@@ -14,6 +14,7 @@ using namespace std;
 std::map<string, int> truncSet;
 
 long globalCount = 0;
+long miniCount = 0;
 
 unsigned int trunc_diff[10000]={};
 
@@ -160,6 +161,8 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 
             AS = AS + internalTruncState[NROUNDS][0];
             if(NROUNDS==1){
+                miniCount++;
+                if (miniCount > SAMPLE_LIMIT) return; //Ensure there are not too many samples per diff
                 ofstream file;
                 file.open(file_name, ios::in | ios::app);
                 cout << "Number of samples: " << ++globalCount << endl;
@@ -208,6 +211,8 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 					AS = AS + internalTruncState[NROUNDS][0];
 
                     if(NROUNDS!=1){
+                        miniCount++;
+                        if (miniCount > SAMPLE_LIMIT) return; //Ensure there are not too many samples per diff
                         ofstream file;
                         file.open(file_name, ios::in | ios::app);
                         cout << "Number of samples: " << ++globalCount << endl;
@@ -246,6 +251,7 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 		assert(*Bn == 2);
 		//!!Modify below to specify the search space. Remember to modify the second if statement below this one as well.
         for(int i=0; i<5000; i++){
+                miniCount=0;
                 unsigned int diff = trunc_diff[i];
 
                 internalTruncState[0][0]=0;
@@ -259,7 +265,7 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 		//!!Modify below to specify the search space (along with the one above)
         for(int i=0; i<5000; i++){
             unsigned int diff = trunc_diff[i];
-
+                miniCount=0;
                 internalTruncState[0][0]=0;
                 internalTruncState[0][1]=diff; // plaintext differences
                 unsigned int as = B[nrounds-1-(n+1)];  // assign B[nrounds-2] to pn,  ( B[0],...,B[nrounds-2],B[nrounds-1])
