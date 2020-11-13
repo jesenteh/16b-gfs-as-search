@@ -36,15 +36,10 @@ std::map<string, int> inputSet;
 
 int main()
 {
-
 	int B[NROUNDS];
 
-	cout << "Perform active s-box truncated search..." << endl;
+	cout << "Perform active s-box truncated search" << endl;
 	cp_AS_search(B); //cp-diff-trail-search
-	cout << "------Optimal number of Active Sbox for each rounds--------" << endl;
-	for (uint32_t i = 0; i < NROUNDS; i++) {
-		cout << "Round " << i << ": " << B[i] << endl; // B[i]: the smallest number of active Sbox for rounds 0 ~ i
-	}
 	cout << "Press 'enter' key to exit..." << endl;
 	getchar();
 	return 0;
