@@ -2,6 +2,7 @@
 16-branch GFS Active S-box Search
 
 Note: If you use the code in this repository for your own research and publish about it, please cite the paper:
+
 J. Chen, J. Teh, Z. Liu, C. Su, A. Samsudin, Y. Xiang, "Towards Accurate Statistical Analysis of Security Margins: New Searching Strategies for Differential Attacks," IEEE Transactions on Computers, Vol. 66:10, 2017. DOI: https://doi.org/10.1109/TC.2017.2699190
 
 The following program will generate a file that contains truncated differences, the number of rounds, the number of AS and permutation pattern for each sample.
