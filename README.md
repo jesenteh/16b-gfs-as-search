@@ -5,6 +5,10 @@ Note: If you use the code in this repository for your own research and publish a
 
 J. Chen, J. Teh, Z. Liu, C. Su, A. Samsudin, Y. Xiang, "Towards Accurate Statistical Analysis of Security Margins: New Searching Strategies for Differential Attacks," IEEE Transactions on Computers, Vol. 66:10, 2017. DOI: https://doi.org/10.1109/TC.2017.2699190
 
+***************************************************************************
+
+Description:
+
 The following program will generate a file that contains truncated differences, the number of rounds, the number of AS and permutation pattern for each sample.
 Special thanks to Yeoh Wei Zhu (https://github.com/yeohweizhu) and Lee Ting Rong (https://github.com/trlee) for earlier versions of the code.
 Note that the program may have redundant code from another full differential search algorithm.
