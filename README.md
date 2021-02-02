@@ -1,5 +1,4 @@
-# 16b-gfs-as-search
-16-branch GFS Active S-box Search
+# 16-branch GFS Active-Sbox Search
 
 Note: If you use/modify the code in this repository for your own research and publish it, please cite the paper:
 
