@@ -20,7 +20,7 @@ MIN_DIFF = The minimum value of the input difference. E.g. 1 =    {0000000000000
 
 MAX_DIFF = The maximum value of the input difference. E.g. 128 =  {0000000010000000}
 
-SAMPLE_INTERVAL = How many samples taken between MIN_DIFF to MAX_DIFF. Set to MAX_DIFF sampling is not required.
+SAMPLE_INTERVAL = How many samples taken between MIN_DIFF to MAX_DIFF. Set to MAX_DIFF if sampling is not required.
 
 perm[16] = The permutation involved in the GFS. Note that the permutation takes into account that the MSB is 15 and LSB is 0 - {15,14,...,2,1,0}. 
 
