@@ -55,7 +55,7 @@ using namespace std;
 //Control Panel*****************************************************************************************************
 //NOTE: Adjust this for different number of round
 #ifndef NROUNDS
-#define NROUNDS 1 //Number of rounds being tested
+#define NROUNDS 15  //Number of rounds being tested
 #endif
 
 #ifndef HW_LIMIT
@@ -63,11 +63,15 @@ using namespace std;
 #endif
 
 #ifndef MAX_SAMPLES
-#define MAX_SAMPLES 12500 //Samples to generate
+#define MAX_SAMPLES 100000 //Samples to generate
+#endif
+
+#ifndef SBOX_BOUND
+#define SBOX_BOUND 6 //Set the bound to current AS + SBOX_BOUND
 #endif
 
 #ifndef SAMPLE_LIMIT
-#define SAMPLE_LIMIT 4 //Limit number of samples per difference
+#define SAMPLE_LIMIT 100000 //Limit number of samples per difference
 #endif
 
 //Permutation is 16! if exhaustive, 16! is a large number..
@@ -80,9 +84,6 @@ const int perm[16] ={5,0,1,4,7,12,3,8,13,6,9,2,15,10,11,14}; //TWINE permutation
 
 //End Control Panel*****************************************************************************************************
 
-#ifndef INCREMENT
-#define INCREMENT MAX_DIFF/SAMPLE_INTERVAL //Number of samples taken between MIN_DIFF and MAX_DIFF
-#endif
 #define CIPHER_SBOX_COUNT 16
 
 //diff Table
