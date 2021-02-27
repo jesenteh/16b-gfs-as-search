@@ -16,11 +16,15 @@ All parameters to control the program are under the "Control Panel" in common.h.
 
 NROUNDS = Number of block cipher rounds
 
-MIN_DIFF = The minimum value of the input difference. E.g. 1 =    {0000000000000001}
+HW_LIMIT = Maximum hamming weight of random samples generated for testing
 
-MAX_DIFF = The maximum value of the input difference. E.g. 128 =  {0000000010000000}
+MAX_SAMPLES = Maximum number of samples to generate before automatically stopping the search
 
-SAMPLE_INTERVAL = How many samples taken between MIN_DIFF to MAX_DIFF. Set to MAX_DIFF if sampling is not required.
+SBOX_BOUND = Set bound to current AS + SBOX_BOUND. If a tight bound is required, set to 0. 
+
+SBOX_ERROR = Set to SBOX_BOUND when generating dataset for machine learning. Set to around 2 if trying to find min AS
+
+SAMPLE_LIMIT = Limit number of samples per input difference (to get a wider variety of inputs)
 
 perm[16] = The permutation involved in the GFS. Note that the permutation takes into account that the MSB is 15 and LSB is 0 - {15,14,...,2,1,0}. 
 
