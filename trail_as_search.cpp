@@ -146,11 +146,16 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 		tmp_as = as + hw16_check_even_pos(ori);
 
 		// only one round
-		if (((n == 0) && (nrounds == 1)) /*&& ((tmp_as <= *Bn))*/) {
+		if (((n == 0) && (nrounds == 1)) && ((tmp_as <= *Bn))) {
 			internalTruncState[n+1][0]=tmp_as;
 			internalTruncState[n+1][1]=new_diff^tmp;
+
+
+
+
 			//------------ update Bn value!!------------
-			*Bn = tmp_as;
+			//This is where the threshold is applied
+			*Bn = tmp_as+SBOX_BOUND;
 			B[n] = tmp_as;
 
 			int AS = 0;
@@ -165,37 +170,43 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
                 if (miniCount > SAMPLE_LIMIT) return; //Ensure there are not too many samples per diff
                 ofstream file;
                 file.open(file_name, ios::in | ios::app);
-                cout << "Number of samples: " << ++globalCount << endl;
                 file << std::bitset<16>(internalTruncState[0][1]) << ", " << std::bitset<16>(internalTruncState[NROUNDS][1]) << ", " << AS << ", " << NROUNDS <<  ", " << perm_str << endl;
-                if (globalCount == MAX_SAMPLES) exit(0);
+                if (++globalCount == MAX_SAMPLES)
+                {
+                    cout << "Number of samples: " << globalCount << endl;
+                    cout << getchar();
+                    exit(0);
+                }
+                cout << "Number of samples: " << globalCount << endl;
             }
 		}
 
 		// Round-0 and not last round
 		if ((n == 0) && (nrounds > 1)){
-			//if (tmp_as <= *Bn){
+			if (tmp_as <= *Bn){
 				internalTruncState[n+1][0]=hw16_check_even_pos(ori);
 				internalTruncState[n+1][1]=new_diff^tmp;
 				cp_AS_threshold_search(n+1, nrounds, B, Bn, internalTruncState);
-			//}
+			}
 		}
 
 		// Round-i and not last round
 		if ((n >= 1) && (n != (nrounds - 1))){
-			//if (tmp_as <= *Bn) {
+			if (tmp_as <= *Bn) {
 				internalTruncState[n+1][0]=hw16_check_even_pos(ori);
 				internalTruncState[n+1][1]=new_diff^tmp;
 				cp_AS_threshold_search(n+1, nrounds, B, Bn, internalTruncState);
-			//}
+			}
 		}
 
 		// last round
 		if((n == (nrounds - 1)) && (nrounds > 1)) {
-			//if (tmp_as <= *Bn) {
+			if (tmp_as <= *Bn) {
 				internalTruncState[n+1][0]=hw16_check_even_pos(ori);
 				internalTruncState[n+1][1]=new_diff^tmp;
 				//------------ update Bn value!!------------
-				*Bn = tmp_as;
+                //This is where the threshold is applied
+				*Bn = tmp_as+SBOX_BOUND;
 				B[n] = tmp_as;
 
 				//[round from 0 to NROUNDS-1][0-Number of AS, 1-Truncated Difference]
@@ -215,12 +226,17 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
                         if (miniCount > SAMPLE_LIMIT) return; //Ensure there are not too many samples per diff
                         ofstream file;
                         file.open(file_name, ios::in | ios::app);
-                        cout << "Number of samples: " << ++globalCount << endl;
                         file << std::bitset<16>(internalTruncState[0][1]) << ", " << std::bitset<16>(internalTruncState[NROUNDS][1]) << ", " << AS << ", " << NROUNDS <<  ", " << perm_str << endl;
-                        if (globalCount == MAX_SAMPLES) exit(0);
+                        if (++globalCount == MAX_SAMPLES)
+                        {
+                            cout << "Number of samples: " << globalCount << endl;
+                            cout << getchar();
+                            exit(0);
+                        }
+                        cout << "Number of samples: " << globalCount << endl;
                     }
 				}
-			//}
+			}
         }
 		tmp = 0;
 	}
@@ -233,7 +249,7 @@ int cp_init_estimate(uint32_t next_round,  int B[NROUNDS], unsigned short intern
 
 	unsigned short diff = internalTruncState[next_round][1];
 
-	int estimate_as = hw16_check_even_pos(diff) + 2;  // error is set to 2
+	int estimate_as = hw16_check_even_pos(diff) + SBOX_BOUND;  // error is set to 2
 
 	Bn_init = B[next_round-1] + estimate_as;
 
@@ -248,12 +264,11 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 {
 	// Only one round
 	if ((n == 0) && (nrounds == 1)) {
-		assert(*Bn == 2);
+		assert(*Bn == CIPHER_SBOX_COUNT);
 		//!!Modify below to specify the search space. Remember to modify the second if statement below this one as well.
         for(int i=0; i<5000; i++){
                 miniCount=0;
                 unsigned int diff = trunc_diff[i];
-
                 internalTruncState[0][0]=0;
                 internalTruncState[0][1]=diff; // plaintext differences
                 roundProcess(n, nrounds, 0, B, Bn, internalTruncState);
@@ -264,8 +279,8 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 	if ((n == 0) && (nrounds > 1)) {
 		//!!Modify below to specify the search space (along with the one above)
         for(int i=0; i<5000; i++){
-            unsigned int diff = trunc_diff[i];
                 miniCount=0;
+                unsigned int diff = trunc_diff[i];
                 internalTruncState[0][0]=0;
                 internalTruncState[0][1]=diff; // plaintext differences
                 unsigned int as = B[nrounds-1-(n+1)];  // assign B[nrounds-2] to pn,  ( B[0],...,B[nrounds-2],B[nrounds-1])
@@ -295,6 +310,7 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 
 uint32_t cp_AS_search(int B[])
 {
+    int total_HW=0;
     //Generate 10000 random input differences
     srand(time(NULL));
     unsigned int check[65536]={0};
@@ -306,8 +322,11 @@ uint32_t cp_AS_search(int B[])
             r = rand()%65536+1;
         }
         trunc_diff[i]=r;
+        total_HW+=hw16(r);
         check[r]++;
     }
+
+    cout << total_HW << endl;
 
     for (int i=0;i<15;i++){
         perm_str += ( std::to_string(perm[i]) + ", ");
@@ -336,13 +355,12 @@ uint32_t cp_AS_search(int B[])
 	}
 
 	// initial bound - best largest round prob estimation
-	int Bn_init = 2; // largest as for one round
+	int Bn_init = CIPHER_SBOX_COUNT; // largest as for one round
 
 	uint32_t nrounds = 0;
 
 	do {
 		nrounds++; //Lets do the first/n round
-		//cout<<"number rounds to process(nrounds) = "<<nrounds <<", Bn_init = "<<Bn_init<<endl;
 
 		int Bn = Bn_init;		  //Set the min AS to initial bound
 		B[nrounds - 1] = Bn_init;
@@ -354,9 +372,9 @@ uint32_t cp_AS_search(int B[])
 			internalTruncState[i][1] = 0; // truncated_diff
 		}
 
-		// r: index of current round(0~), nrounds: total number of rounds(NROUNDS), Bn: the best found probability on n rounds
+		// r: index of current round(0~), nrounds: total number of rounds(NROUNDS), Bn: the best found probability on n rounds + SBOX_BOUND
 		cp_AS_threshold_search(r, nrounds, B, &Bn, internalTruncState);
-		assert(B[nrounds - 1] == Bn);
+		//assert(B[nrounds - 1] == Bn); //We do not need to assert because we are not looking for the best AS
 
 		// print out the active sbox found for "nrounds" rounds
 		for (uint32_t i = 0; i < nrounds; i++) {
@@ -371,5 +389,6 @@ uint32_t cp_AS_search(int B[])
 	} while ((nrounds < NROUNDS) //Check rounds complete after doing round n
 		&& ((B[nrounds - 1] < max_as) || (nrounds == 0)));
 
+    cout << "Number of samples: " << globalCount << endl;
 	return nrounds;
 }
